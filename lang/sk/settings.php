@@ -6,3 +6,4 @@
  * @author Wizzard <wizzardsk@gmail.com>
  */
 $lang['default_maintained_only'] = 'Predvolene vyhľadávať iba udržiavané stránky';
+$lang['mail_limit'] = 'Minimálny počet dní pred opätovným odoslaním pripomienkového e-mailu (0 na vypnutie)';

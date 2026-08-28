@@ -1,0 +1,1 @@
+ALTER TABLE watchcycle ADD COLUMN last_mail INT DEFAULT 0;

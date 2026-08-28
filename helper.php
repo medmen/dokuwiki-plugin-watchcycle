@@ -198,13 +198,38 @@ class helper_plugin_watchcycle extends Plugin
      *
      * @param string $def defined maintainers
      * @param string $page that needs checking
+     * @return bool whether email was sent
      */
     public function informMaintainer($def, $page)
     {
+        $mail_limit = (int)$this->getConf('mail_limit');
+        if ($mail_limit > 0) {
+            /** @var \helper_plugin_watchcycle_db $dbHelper */
+            $dbHelper = plugin_load('helper', 'watchcycle_db');
+            if ($dbHelper) {
+                $lastMail = $dbHelper->getLastMail($page);
+                if ($lastMail > 0 && $this->daysAgo($lastMail) < $mail_limit) {
+                    return false;
+                }
+            }
+        }
+
         $mails = $this->getMaintainerMails($def);
+        if (empty($mails)) {
+            return false;
+        }
+
         foreach ($mails as $mail) {
             $this->sendMail($mail, $page);
         }
+
+        /** @var \helper_plugin_watchcycle_db $dbHelper */
+        $dbHelper = plugin_load('helper', 'watchcycle_db');
+        if ($dbHelper) {
+            $dbHelper->updateLastMail($page);
+        }
+
+        return true;
     }
 
     /**

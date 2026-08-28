@@ -144,8 +144,9 @@ class action_plugin_watchcycle extends ActionPlugin
             //false if page needs checking
             $uptodate = $helper->daysAgo($last_maintainer_rev) <= (int)$watchcycle['cycle'];
 
+            $mailSent = false;
             if ($uptodate === false) {
-                $helper->informMaintainer($watchcycle['maintainer'], $ID);
+                $mailSent = $helper->informMaintainer($watchcycle['maintainer'], $page);
             }
 
             if (!$row) {
@@ -154,6 +155,9 @@ class action_plugin_watchcycle extends ActionPlugin
                 $entry['last_maintainer_rev'] = $last_maintainer_rev;
                 // uptodate is an int in the database
                 $entry['uptodate'] = (int)$uptodate;
+                if ($mailSent) {
+                    $entry['last_mail'] = time();
+                }
                 $sqlite->saveRecord('watchcycle', $entry);
             } else { //check if we need to update something
                 $toupdate = [];

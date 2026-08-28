@@ -78,4 +78,31 @@ class helper_plugin_watchcycle_db extends Plugin
 
         return $this->sqlite->queryAll($q, $q_args);
     }
+
+    /**
+     * Get timestamp of the last email sent for a page
+     *
+     * @param string $page
+     * @return int
+     */
+    public function getLastMail($page)
+    {
+        $q = 'SELECT last_mail FROM watchcycle WHERE page = ?';
+        $res = $this->sqlite->queryValue($q, [$page]);
+        return (int)$res;
+    }
+
+    /**
+     * Update the last mail timestamp for a page
+     *
+     * @param string $page
+     * @param int|null $timestamp
+     * @return bool
+     */
+    public function updateLastMail($page, $timestamp = null)
+    {
+        $timestamp = $timestamp ?? time();
+        $q = 'UPDATE watchcycle SET last_mail = ? WHERE page = ?';
+        return (bool)$this->sqlite->query($q, [$timestamp, $page]);
+    }
 }

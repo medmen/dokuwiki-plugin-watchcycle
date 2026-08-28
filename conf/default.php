@@ -7,3 +7,4 @@
  */
 
 $conf['default_maintained_only'] = '0';
+$conf['mail_limit'] = 0;
