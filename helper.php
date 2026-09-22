@@ -212,8 +212,7 @@ class helper_plugin_watchcycle extends Plugin
                 if ($lastMail > 0 && $this->daysAgo($lastMail) < $mail_limit) {
                     // write log message to explain and test
                     $details = "will NOT Send a watchcycle reminder email for $page , because a rate limit of $mail_limit days is in effect and last reminder was sent ". $this->daysAgo($lastMail)." days ago.";
-                    Logger::getInstance('plugin_watchcycle')->debug('Not sending email (rate limit)', $details, __FILE__, __LINE__);
-                    
+                    Logger::debug('Not sending email (rate limit)', $details, __FILE__, __LINE__);
                     return false;
                 }
             }
@@ -240,7 +239,7 @@ class helper_plugin_watchcycle extends Plugin
     /**
      * Sends an email
      *
-     * @param array $mail
+     * @param string $mail
      * @param string $page
      */
     protected function sendMail($mail, $page)
